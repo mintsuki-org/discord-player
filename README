@@ -1,0 +1,54 @@
+ discord-player
+================
+
+discord-player is a "client" (really, it's just a web browser) meant for Discord.
+
+ Why?
+======
+
+Because the official client is proprietary and slow for me, and it does stuff in the
+background that hogs my machine :(
+I'd use Discord in my browser of choice, but it doesn't run correctly.
+
+ Build dependencies
+====================
+
+ -- Debian and Ubuntu --
+
+On Debian and Ubuntu, discord-player depends on the following packages:
+
+    build-essential qt5-qmake qtbase5-dev qt5-default qtwebengine5-dev
+
+ -- Arch --
+
+On Arch, it depends on qt5, which can be installed with:
+
+    sudo pacman -S qt5
+
+Then install all selections.
+
+ How to build
+==============
+
+To configure the package, use the ./configure script:
+
+    ./configure
+
+Or, if you want to specify a custom prefix:
+
+    ./configure --prefix=/my/custom/path
+
+To build, just run:
+
+    make
+
+To install it run:
+
+    make install
+
+(or 'sudo make install' if you need admin privileges)
+
+
+That is it, have fun! ;)
+
+P.S.: I cannot write C++
