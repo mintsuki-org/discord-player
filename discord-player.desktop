@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Discord
+Comment=Qtwebengine wrapper for Discord, because electron sucks.
+Path=/usr/local/bin
+Exec=discord-player
+Icon=/usr/local/share/icons/discord-player.icon
+Terminal=false
+Categories=Internet;
