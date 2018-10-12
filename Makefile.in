@@ -12,9 +12,14 @@ clean:
 install:
 	mkdir -p ${PREFIX}/bin
 	cp build/discord-player ${PREFIX}/bin
+	mkdir -p ${PREFIX}/share/icons
+	cp discord-player.icon ${PREFIX}/share/icons
+	cp discord-player.desktop ${PREFIX}/share/applications
 
 uninstall:
 	rm -f ${PREFIX}/bin/discord-player
+	rm -f ${PREFIX}/share/icons/discord-player.desktop
+	rm -f ${PREFIX}/share/applications/discord-player.desktop
 
 distclean: clean
 	rm Makefile

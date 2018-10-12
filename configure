@@ -33,8 +33,10 @@ EOF
 done
 
 cp Makefile.in Makefile
+cp discord-player.desktop.in discord-player.desktop
 
 sed -i "s|@@prefix@@|$PREFIX|g" Makefile
+sed -i "s|@@prefix@@|$PREFIX|g" discord-player.desktop
 printf "Prefix: $PREFIX\n"
 
 exit 0
