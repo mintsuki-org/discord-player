@@ -23,5 +23,6 @@ uninstall:
 
 distclean: clean
 	rm Makefile
+	rm discord-player.desktop
 
 dist-clean: distclean
