@@ -1,6 +1,12 @@
 #include "discord_player.h"
 #include "ui_discord_player.h"
 
+#include <QWebEngineScript>
+#include <QWebEngineScriptCollection>
+#include <QStandardPaths>
+#include <QDir>
+#include <QFile>
+
 discord_player::discord_player(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::discord_player)
@@ -8,6 +14,27 @@ discord_player::discord_player(QWidget *parent) :
     ui->setupUi(this);
 
     showMaximized();
+
+    QDir configDirectory(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation));
+    QFile css(configDirectory.absoluteFilePath(QStringLiteral("discord-player/custom.css")));
+    if (css.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QByteArray source = css.readAll();
+        qInfo() << "Injecting custom css: " << source;
+        QWebEngineScript script;
+        QString s = QStringLiteral("(function() {"\
+                                   "    css = document.createElement('style');"\
+                                   "    css.type = 'text/css';"\
+                                   "    css.id = 'injectedCss';"\
+                                   "    document.head.appendChild(css);"\
+                                   "    css.innerText = atob('%2');"\
+                                   "})()").arg(QString::fromLatin1(source.toBase64()));
+        script.setName(QStringLiteral("injectedCss"));
+        script.setSourceCode(s);
+        script.setInjectionPoint(QWebEngineScript::DocumentReady);
+        script.setRunsOnSubFrames(true);
+        script.setWorldId(QWebEngineScript::ApplicationWorld);
+        ui->webEngineView->page()->scripts().insert(script);
+    }
 
     connect(ui->webEngineView->page(),
             SIGNAL(featurePermissionRequested(const QUrl &, QWebEnginePage::Feature)),
