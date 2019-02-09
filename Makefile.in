@@ -4,7 +4,7 @@ PREFIX = @@prefix@@
 
 all:
 	mkdir -p build && cd build && qmake ../discord-player.pro
-	make -C build
+	$(MAKE) -C build
 
 clean:
 	rm -rf build
