@@ -25,6 +25,12 @@ On Arch, it depends on qt5, which can be installed with:
 
 Then install all selections.
 
+#### Void Linux
+
+Install the following:
+
+`sudo xbps-install -S gcc make qt5-qmake qt5-webengine-devel qt5-webchannel-devel qt5-declarative-devel qt5-location-devel`
+
 #### Fedora
 
 First, install the dependencies:
