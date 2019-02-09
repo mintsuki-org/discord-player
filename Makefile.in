@@ -3,7 +3,7 @@ PREFIX = @@prefix@@
 .PHONY: all clean install uninstall distclean dist-clean
 
 all:
-	mkdir -p build && cd build && qmake ../discord-player.pro -spec linux-g++
+	mkdir -p build && cd build && qmake ../discord-player.pro
 	make -C build
 
 clean:
