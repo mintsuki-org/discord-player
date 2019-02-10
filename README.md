@@ -19,7 +19,7 @@ On Debian and Ubuntu, discord-player depends on the following packages:
 
 #### Arch Linux
 
-## This section needs to be expanded to only include the needed dependencies
+##### This section needs to be expanded to only include the needed dependencies
 
 On Arch, it depends on qt5, which can be installed with:
 
