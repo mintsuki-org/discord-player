@@ -15,9 +15,11 @@ I'd use Discord in my browser of choice, but it doesn't run correctly.
 
 On Debian and Ubuntu, discord-player depends on the following packages:
 
-`build-essential qt5-qmake qtbase5-dev qt5-default qtwebengine5-dev`
+`sudo apt install build-essential qt5-qmake qtbase5-dev qt5-default qtwebengine5-dev`
 
 #### Arch Linux
+
+## This section needs to be expanded to only include the needed dependencies
 
 On Arch, it depends on qt5, which can be installed with:
 
@@ -30,6 +32,12 @@ Then install all selections.
 Install the following:
 
 `sudo xbps-install -S gcc make qt5-qmake qt5-webengine-devel qt5-webchannel-devel qt5-declarative-devel qt5-location-devel`
+
+#### FreeBSD
+
+Install the following:
+
+`pkg install qt5-qmake qt5-buildtools qt5-webengine`
 
 #### Fedora
 
