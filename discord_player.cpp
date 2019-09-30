@@ -3,6 +3,7 @@
 
 #include <QWebEngineScript>
 #include <QWebEngineScriptCollection>
+#include <QWebEngineSettings>
 #include <QStandardPaths>
 #include <QDir>
 #include <QFile>
@@ -40,6 +41,8 @@ discord_player::discord_player(QWidget *parent) :
             SIGNAL(featurePermissionRequested(const QUrl &, QWebEnginePage::Feature)),
             this,
             SLOT(grantFeaturePermission(const QUrl &, QWebEnginePage::Feature)));
+
+    ui->webEngineView->settings()->setAttribute(QWebEngineSettings::ScrollAnimatorEnabled, true);
 
     ui->webEngineView->setUrl(QUrl("https://discordapp.com/channels/@me"));
 }
