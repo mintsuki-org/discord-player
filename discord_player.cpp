@@ -4,15 +4,38 @@
 #include <QWebEngineScript>
 #include <QWebEngineScriptCollection>
 #include <QWebEngineSettings>
+#include <QDesktopServices>
 #include <QStandardPaths>
 #include <QDir>
 #include <QFile>
+
+DiscordPlayerPage::DiscordPlayerPage(QWebEngineProfile *profile, QObject *parent) : QWebEnginePage(profile, parent) {}
+DiscordPlayerPage::DiscordPlayerPage(QObject *parent) : QWebEnginePage(parent) {}
+
+QWebEnginePage *DiscordPlayerPage::createWindow(QWebEnginePage::WebWindowType type) {
+    qDebug() << "createWindow type: " << type;
+    return new DiscordPlayerPage();
+}
+
+bool DiscordPlayerPage::acceptNavigationRequest(const QUrl &url, QWebEnginePage::NavigationType type, bool isMainFrame) {
+    qDebug() << "acceptNavigationRequest url: " << url << " type: " << type << " isMainFrame: " << isMainFrame;
+    if (type == QWebEnginePage::NavigationTypeLinkClicked) {
+        QDesktopServices::openUrl(url);
+        delete this;
+        return false;
+    } else {
+        return QWebEnginePage::acceptNavigationRequest(url, type, isMainFrame);
+    }
+}
 
 discord_player::discord_player(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::discord_player)
 {
     ui->setupUi(this);
+
+    DiscordPlayerPage *DPage = new DiscordPlayerPage();
+    ui->webEngineView->setPage(DPage);
 
     showMaximized();
 
@@ -49,6 +72,7 @@ discord_player::discord_player(QWidget *parent) :
 
 discord_player::~discord_player()
 {
+    delete ui->webEngineView->page();
     delete ui;
 }
 

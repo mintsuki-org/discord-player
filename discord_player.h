@@ -2,8 +2,19 @@
 #define DISCORD_PLAYER_H
 
 #include <QMainWindow>
+#include <QWebEnginePage>
 #include <QWebEngineView>
 #include <QMessageBox>
+
+class DiscordPlayerPage : public QWebEnginePage {
+    Q_OBJECT
+public:
+    DiscordPlayerPage(QWebEngineProfile *profile, QObject *parent = Q_NULLPTR);
+    DiscordPlayerPage(QObject *parent = Q_NULLPTR);
+protected:
+    QWebEnginePage *createWindow(QWebEnginePage::WebWindowType type) override;
+    bool acceptNavigationRequest(const QUrl &url, QWebEnginePage::NavigationType type, bool isMainFrame) override;
+};
 
 namespace Ui {
 class discord_player;
