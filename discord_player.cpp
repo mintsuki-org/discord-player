@@ -9,19 +9,20 @@
 #include <QDir>
 #include <QFile>
 
+static DiscordPlayerPage *globalPageToGetClickUrl;
+
 DiscordPlayerPage::DiscordPlayerPage(QWebEngineProfile *profile, QObject *parent) : QWebEnginePage(profile, parent) {}
 DiscordPlayerPage::DiscordPlayerPage(QObject *parent) : QWebEnginePage(parent) {}
 
 QWebEnginePage *DiscordPlayerPage::createWindow(QWebEnginePage::WebWindowType type) {
     qDebug() << "createWindow type: " << type;
-    return new DiscordPlayerPage();
+    return globalPageToGetClickUrl;
 }
 
 bool DiscordPlayerPage::acceptNavigationRequest(const QUrl &url, QWebEnginePage::NavigationType type, bool isMainFrame) {
     qDebug() << "acceptNavigationRequest url: " << url << " type: " << type << " isMainFrame: " << isMainFrame;
     if (type == QWebEnginePage::NavigationTypeLinkClicked) {
         QDesktopServices::openUrl(url);
-        delete this;
         return false;
     } else {
         return QWebEnginePage::acceptNavigationRequest(url, type, isMainFrame);
@@ -33,6 +34,8 @@ discord_player::discord_player(QWidget *parent) :
     ui(new Ui::discord_player)
 {
     ui->setupUi(this);
+
+    globalPageToGetClickUrl = new DiscordPlayerPage();
 
     DiscordPlayerPage *DPage = new DiscordPlayerPage();
     ui->webEngineView->setPage(DPage);
@@ -72,6 +75,7 @@ discord_player::discord_player(QWidget *parent) :
 
 discord_player::~discord_player()
 {
+    delete globalPageToGetClickUrl;
     delete ui->webEngineView->page();
     delete ui;
 }
