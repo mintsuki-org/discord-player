@@ -69,9 +69,9 @@ discord_player::discord_player(QWidget *parent) :
             this,
             SLOT(grantFeaturePermission(const QUrl &, QWebEnginePage::Feature)));
 
-    ui->webEngineView->settings()->setAttribute(QWebEngineSettings::ScrollAnimatorEnabled, true);
+    ui->webEngineView->page()->settings()->setAttribute(QWebEngineSettings::ScrollAnimatorEnabled, true);
 
-    ui->webEngineView->setUrl(QUrl("https://discordapp.com/channels/@me"));
+    ui->webEngineView->page()->setUrl(QUrl("https://discordapp.com/channels/@me"));
 }
 
 discord_player::~discord_player()
