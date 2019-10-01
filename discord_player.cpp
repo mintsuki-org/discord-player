@@ -39,6 +39,23 @@ discord_player::discord_player(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::discord_player)
 {
+    QDir configDirectory(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation));
+
+    // Check the lock for other open instances
+    QFile lock(configDirectory.absoluteFilePath(QStringLiteral("discord-player/lock")));
+    if (lock.open(QIODevice::ReadOnly)) {
+        // The lock is already acquired
+        QMessageBox::critical(this, "Application running",
+                                  "Another instance of discord-player was detected running.",
+                                  QMessageBox::Ok);
+        lock.close();
+        exit(1);
+    }
+    while (!lock.open(QIODevice::WriteOnly)) {
+        configDirectory.mkdir(configDirectory.absoluteFilePath("discord-player"));
+    }
+    lock.close();
+
     ui->setupUi(this);
 
     globalPageToGetClickUrl = new DiscordPlayerPage();
@@ -48,7 +65,6 @@ discord_player::discord_player(QWidget *parent) :
 
     showMaximized();
 
-    QDir configDirectory(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation));
     QFile css(configDirectory.absoluteFilePath(QStringLiteral("discord-player/custom.css")));
     if (css.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QByteArray source = css.readAll();
@@ -81,6 +97,11 @@ discord_player::discord_player(QWidget *parent) :
 
 discord_player::~discord_player()
 {
+    QDir configDirectory(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation));
+    QFile lock(configDirectory.absoluteFilePath(QStringLiteral("discord-player/lock")));
+
+    lock.remove();
+
     delete globalPageToGetClickUrl;
     delete ui->webEngineView->page();
     delete ui;
