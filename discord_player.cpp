@@ -9,6 +9,8 @@
 #include <QDir>
 #include <QFile>
 
+static QUrl baseUrl("https://discordapp.com/channels/@me");
+
 static DiscordPlayerPage *globalPageToGetClickUrl;
 
 DiscordPlayerPage::DiscordPlayerPage(QWebEngineProfile *profile, QObject *parent) : QWebEnginePage(profile, parent) {}
@@ -21,13 +23,16 @@ QWebEnginePage *DiscordPlayerPage::createWindow(QWebEnginePage::WebWindowType ty
 
 bool DiscordPlayerPage::acceptNavigationRequest(const QUrl &url, QWebEnginePage::NavigationType type, bool isMainFrame) {
     qDebug() << "acceptNavigationRequest url: " << url << " type: " << type << " isMainFrame: " << isMainFrame;
-    if (    type == QWebEnginePage::NavigationTypeLinkClicked
-         || type == QWebEnginePage::NavigationTypeOther) {
+    if (isMainFrame) {
+        // Exception for base link
+        if (url == baseUrl)
+            goto pass;
         QDesktopServices::openUrl(url);
         return false;
-    } else {
-        return QWebEnginePage::acceptNavigationRequest(url, type, isMainFrame);
     }
+
+pass:
+    return QWebEnginePage::acceptNavigationRequest(url, type, isMainFrame);
 }
 
 discord_player::discord_player(QWidget *parent) :
@@ -71,7 +76,7 @@ discord_player::discord_player(QWidget *parent) :
 
     ui->webEngineView->page()->settings()->setAttribute(QWebEngineSettings::ScrollAnimatorEnabled, true);
 
-    ui->webEngineView->page()->setUrl(QUrl("https://discordapp.com/channels/@me"));
+    ui->webEngineView->page()->setUrl(QUrl(baseUrl));
 }
 
 discord_player::~discord_player()
