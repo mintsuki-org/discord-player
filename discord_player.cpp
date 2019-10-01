@@ -21,7 +21,8 @@ QWebEnginePage *DiscordPlayerPage::createWindow(QWebEnginePage::WebWindowType ty
 
 bool DiscordPlayerPage::acceptNavigationRequest(const QUrl &url, QWebEnginePage::NavigationType type, bool isMainFrame) {
     qDebug() << "acceptNavigationRequest url: " << url << " type: " << type << " isMainFrame: " << isMainFrame;
-    if (type == QWebEnginePage::NavigationTypeLinkClicked) {
+    if (    type == QWebEnginePage::NavigationTypeLinkClicked
+         || type == QWebEnginePage::NavigationTypeOther) {
         QDesktopServices::openUrl(url);
         return false;
     } else {
