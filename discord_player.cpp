@@ -9,7 +9,7 @@
 #include <QDir>
 #include <QFile>
 
-static QUrl baseUrl("https://discordapp.com/channels/@me");
+static const char *baseUrl;
 
 static DiscordPlayerPage *globalPageToGetClickUrl;
 
@@ -25,7 +25,7 @@ bool DiscordPlayerPage::acceptNavigationRequest(const QUrl &url, QWebEnginePage:
     qDebug() << "acceptNavigationRequest url: " << url << " type: " << type << " isMainFrame: " << isMainFrame;
     if (isMainFrame) {
         // Exception for base link
-        if (url == baseUrl)
+        if (url == QUrl(baseUrl))
             goto pass;
         QDesktopServices::openUrl(url);
         return false;
@@ -35,10 +35,12 @@ pass:
     return QWebEnginePage::acceptNavigationRequest(url, type, isMainFrame);
 }
 
-discord_player::discord_player(QWidget *parent) :
+discord_player::discord_player(const char *baseUrl_arg, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::discord_player)
 {
+    baseUrl = baseUrl_arg;
+
     QDir configDirectory(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation));
 
     // Check the lock for other open instances

@@ -25,7 +25,7 @@ class discord_player : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit discord_player(QWidget *parent = 0);
+    explicit discord_player(const char *baseUrl, QWidget *parent = 0);
     ~discord_player();
 
 private slots:
