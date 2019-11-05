@@ -8,10 +8,13 @@
 #include <QStandardPaths>
 #include <QDir>
 #include <QFile>
+#include <unistd.h>
 
 static const char *baseUrl;
 
 static DiscordPlayerPage *globalPageToGetClickUrl;
+
+static QFile *lock;
 
 DiscordPlayerPage::DiscordPlayerPage(QWebEngineProfile *profile, QObject *parent) : QWebEnginePage(profile, parent) {}
 DiscordPlayerPage::DiscordPlayerPage(QObject *parent) : QWebEnginePage(parent) {}
@@ -41,22 +44,22 @@ discord_player::discord_player(const char *baseUrl_arg, QWidget *parent) :
 {
     baseUrl = baseUrl_arg;
 
-    QDir configDirectory(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation));
-
     // Check the lock for other open instances
-    QFile lock(configDirectory.absoluteFilePath(QStringLiteral("discord-player/lock")));
-    if (lock.open(QIODevice::ReadOnly)) {
+    lock = new QFile(QString("/tmp/discord-player-lock.") + QString::number(getuid()));
+    if (lock->open(QIODevice::ReadOnly)) {
         // The lock is already acquired
         QMessageBox::critical(this, "Application running",
                                   "Another instance of discord-player was detected running.",
                                   QMessageBox::Ok);
-        lock.close();
+        lock->close();
         exit(1);
     }
-    while (!lock.open(QIODevice::WriteOnly)) {
-        configDirectory.mkdir(configDirectory.absoluteFilePath("discord-player"));
+    if (!lock->open(QIODevice::WriteOnly)) {
+        // Something happened
+        // Something happened
+        exit(2);
     }
-    lock.close();
+    lock->close();
 
     ui->setupUi(this);
 
@@ -67,6 +70,7 @@ discord_player::discord_player(const char *baseUrl_arg, QWidget *parent) :
 
     showMaximized();
 
+    QDir configDirectory(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation));
     QFile css(configDirectory.absoluteFilePath(QStringLiteral("discord-player/custom.css")));
     if (css.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QByteArray source = css.readAll();
@@ -99,10 +103,7 @@ discord_player::discord_player(const char *baseUrl_arg, QWidget *parent) :
 
 discord_player::~discord_player()
 {
-    QDir configDirectory(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation));
-    QFile lock(configDirectory.absoluteFilePath(QStringLiteral("discord-player/lock")));
-
-    lock.remove();
+    lock->remove();
 
     delete globalPageToGetClickUrl;
     delete ui->webEngineView->page();
