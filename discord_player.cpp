@@ -9,6 +9,7 @@
 #include <QDir>
 #include <QFile>
 #include <unistd.h>
+#include <signal.h>
 
 static const char *baseUrl;
 
@@ -38,6 +39,12 @@ pass:
     return QWebEnginePage::acceptNavigationRequest(url, type, isMainFrame);
 }
 
+[[noreturn]] void lockDeleteHandler(int a) {
+    qInfo() << "Catched signal: " << a;
+    lock->remove();
+    exit(0);
+}
+
 discord_player::discord_player(const char *baseUrl_arg, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::discord_player)
@@ -59,6 +66,16 @@ discord_player::discord_player(const char *baseUrl_arg, QWidget *parent) :
         // Something happened
         exit(2);
     }
+
+    // Hook lock for SIGINT, so in case of Ctrl+C or similar we delete the lock.
+    struct sigaction sigIntHandler;
+
+    sigIntHandler.sa_handler = lockDeleteHandler;
+    sigemptyset(&sigIntHandler.sa_mask);
+    sigIntHandler.sa_flags = 0;
+
+    sigaction(SIGINT, &sigIntHandler, nullptr);
+
     lock->close();
 
     ui->setupUi(this);
