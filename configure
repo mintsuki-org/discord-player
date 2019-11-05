@@ -32,8 +32,15 @@ EOF
 	esac
 done
 
-sed "s|@@prefix@@|$PREFIX|g" < Makefile.in > Makefile
-sed "s|@@prefix@@|$PREFIX|g" < discord-player.desktop.in > discord-player.desktop
-printf "Prefix: $PREFIX\n"
+git clone https://github.com/mintsuki/generic-webplayer.git
 
-exit 0
+cp discord-player.icon generic-webplayer/player.icon
+cp discord-player.desktop generic-webplayer/player.desktop
+cd generic-webplayer
+./configure \
+        --prefix="$PREFIX" \
+        --webapp-url="https://discordapp.com/channels/@me" \
+        --player-name="discord-player" \
+        --player-nice-name="Discord Player"
+
+printf "Prefix: $PREFIX\n"
