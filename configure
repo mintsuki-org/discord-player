@@ -34,8 +34,8 @@ done
 
 git clone https://github.com/mintsuki/generic-webplayer.git
 
-cp discord-player.icon generic-webplayer/player.icon
-cp discord-player.desktop generic-webplayer/player.desktop
+cp discord-player.icon generic-webplayer/src/player.icon
+cp discord-player.desktop generic-webplayer/src/player.desktop
 cd generic-webplayer
 ./configure \
         --prefix="$PREFIX" \
