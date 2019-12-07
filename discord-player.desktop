@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=Discord Player
-Comment=Qtwebengine wrapper for Discord, because electron sucks.
-GenericName=Internet Messenger
-Exec=@@prefix@@/bin/discord-player
-Icon=@@prefix@@/share/icons/discord-player.icon
-Terminal=false
-Type=Application
-Categories=Network;InstantMessaging;
