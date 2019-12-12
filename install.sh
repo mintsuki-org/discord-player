@@ -10,15 +10,14 @@ PREFIX="/usr/local"
 [ -d generic-webplayer ] && cd generic-webplayer && git pull && cd ..
 
 rm -rf build && mkdir build && cd build
-cmake ../generic-webplayer/src \
+cmake ../generic-webplayer \
+    -DCMAKE_INSTALL_PREFIX="$PREFIX" \
     -DPLAYER_NAME="discord-player" \
     -DPLAYER_NICE_NAME="Discord Player" \
     -DPLAYER_WEBAPP_URL="https://discordapp.com/channels/@me"
 make
+make install
 cd ..
-
-install -d "${PREFIX}/bin"
-install -s build/discord-player "${PREFIX}/bin/discord-player"
 
 install -d "${PREFIX}/share/applications"
 cat <<EOF >"${PREFIX}/share/applications/discord-player.desktop"
