@@ -18,6 +18,12 @@ On Debian and Ubuntu, discord-player depends on the following packages:
 
 `sudo apt install build-essential cmake qtbase5-dev qt5-default qtwebengine5-dev xdg-utils`
 
+#### Arch Linux
+
+Install the following:
+
+`pacman -S qt5-base qt5-webengine qt5-webchannel qt5-declarative qt5-location xdg-utils cmake`
+
 #### Void Linux
 
 Install the following:
