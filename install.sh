@@ -14,7 +14,7 @@ cmake ../generic-webplayer \
     -DCMAKE_INSTALL_PREFIX="$PREFIX" \
     -DPLAYER_NAME="discord-player" \
     -DPLAYER_NICE_NAME="Discord Player" \
-    -DPLAYER_WEBAPP_URL="https://discordapp.com/channels/@me"
+    -DPLAYER_WEBAPP_URL="https://discord.com/channels/@me"
 make
 make install
 cd ..
